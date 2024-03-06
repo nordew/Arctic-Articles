@@ -32,6 +32,12 @@ func (h *Handler) Init() *gin.Engine {
 		auth.GET("/refresh", h.refresh)
 	}
 
+	profile := app.Group("/profile")
+	profile.Use(h.AuthMiddleware)
+	{
+		profile.DELETE("/", h.delete)
+	}
+
 	return app
 }
 
