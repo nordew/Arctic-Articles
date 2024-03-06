@@ -24,4 +24,7 @@ type UserStorage interface {
 
 	// Refresh updates the refresh token for a user in the database.
 	Refresh(ctx context.Context, userID, token string) error
+
+	// Delete completely deletes user from storage
+	Delete(ctx context.Context, userID string) error
 }
