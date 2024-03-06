@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 	"errors"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5"
 	"github.com/nordew/ArcticArticles/internal/domain/models"
 )
 
@@ -25,7 +25,6 @@ func (s *userStorage) GetByID(ctx context.Context, userID string) (*models.User,
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			s.logger.Error("user not found", err.Error(), op)
 			return nil, models.ErrWrongEmailOrPassword
 		}
 
@@ -54,7 +53,6 @@ func (s *userStorage) GetByEmail(ctx context.Context, email string) (*models.Use
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			s.logger.Error("user not found", err.Error(), op)
 			return nil, models.ErrWrongEmailOrPassword
 		}
 
