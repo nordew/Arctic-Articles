@@ -18,4 +18,8 @@ type UserService interface {
 	// Refresh generates new access and refresh tokens based on the provided refresh token.
 	// Returns new accessToken, refreshToken and an error. If an error occurs, both tokens will be empty strings.
 	Refresh(ctx context.Context, token string) (string, string, error)
+
+	// Delete deletes a user with the provided userID from the system.
+	// It removes all user-related data associated with the given userID.
+	Delete(ctx context.Context, userID string) error
 }
