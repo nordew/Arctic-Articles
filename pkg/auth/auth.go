@@ -128,11 +128,11 @@ func (s *jwtAuthenticator) ParseToken(accessToken string) (*ParseTokenClaimsOutp
 		return nil, fmt.Errorf("token is not valid")
 	}
 
-	roleVal, ok := role.(int)
+	roleVal, ok := role.(float64)
 	if !ok {
-		s.logger.Error("token role is invalid not int")
+		s.logger.Error("token role is invalid not float")
 		return nil, fmt.Errorf("token role is invalid not int")
 	}
 
-	return &ParseTokenClaimsOutput{Sub: fmt.Sprint(sub), Role: roleVal}, nil
+	return &ParseTokenClaimsOutput{Sub: fmt.Sprint(sub), Role: int(roleVal)}, nil
 }
