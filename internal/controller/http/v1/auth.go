@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/nordew/ArcticArticles/internal/domain/models"
 	"net/http"
@@ -55,6 +56,11 @@ func (h *Handler) signIn(c *gin.Context) {
 
 	accessToken, refreshToken, err := h.userService.SignIn(context.Background(), input.Email, input.Password)
 	if err != nil {
+		if errors.Is(err, models.ErrWrongEmailOrPassword) {
+			writeErr(c, http.StatusUnauthorized, err.Error())
+			return
+		}
+
 		writeErr(c, http.StatusInternalServerError, err.Error())
 		return
 	}
