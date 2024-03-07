@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (h *Handler) delete(c *gin.Context) {
+func (h *Handler) deleteUser(c *gin.Context) {
 	claims, exists := c.Get("tokenClaims")
 	if !exists {
 		writeErr(c, http.StatusUnauthorized, "claims not found")
