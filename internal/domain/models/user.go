@@ -38,7 +38,7 @@ func (i *SignUpInput) Validate() error {
 		return err
 	}
 
-	if utf8.RuneCountInString(i.Name) > 32 {
+	if utf8.RuneCountInString(i.Name) > 32 || utf8.RuneCountInString(i.Name) < 2 {
 		return ErrWrongNameLength
 	}
 
