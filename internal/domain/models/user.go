@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/go-playground/validator/v10"
 	"time"
+	"unicode/utf8"
 )
 
 var validate *validator.Validate
@@ -35,6 +36,10 @@ type SignInInput struct {
 func (i *SignUpInput) Validate() error {
 	if err := validate.Struct(i); err != nil {
 		return err
+	}
+
+	if utf8.RuneCountInString(i.Name) > 32 {
+		return ErrWrongNameLength
 	}
 
 	return nil
