@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nordew/ArcticArticles/internal/domain/models"
 	"net/http"
+	"unicode/utf8"
 )
 
 func (h *Handler) signUp(c *gin.Context) {
@@ -16,7 +17,7 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 
-	if err := input.Validate(); err != nil {
+	if err := input.Validate(); err != nil || utf8.RuneCountInString(input.Name) > 32 {
 		validationErr(c)
 		return
 	}
