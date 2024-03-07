@@ -35,3 +35,7 @@ func (s *userService) SignIn(ctx context.Context, email, password string) (strin
 
 	return accessToken, refreshToken, nil
 }
+
+func (s *userService) GetByID(ctx context.Context, userID string) (*models.User, error) {
+	return s.userStorage.GetByID(ctx, userID)
+}
