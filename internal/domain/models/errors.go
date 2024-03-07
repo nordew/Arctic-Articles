@@ -8,4 +8,5 @@ var (
 	ErrWrongEmailOrPassword = errors.New("wrong email or password")
 	ErrInvalidToken         = errors.New("invalid token")
 	ErrWrongNameLength      = errors.New("name length is more than 32 symbols")
+	ErrWrongTitleLength     = errors.New("title length is more than 70 symbols")
 )
