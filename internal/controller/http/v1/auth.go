@@ -12,11 +12,15 @@ func (h *Handler) signUp(c *gin.Context) {
 	var input models.SignUpInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
+		h.logger.Error("Error binding JSON for signUp", err)
+
 		validationErr(c)
 		return
 	}
 
 	if err := input.Validate(); err != nil {
+		h.logger.Error("Validation error for signUp", err)
+
 		validationErr(c)
 		return
 	}
@@ -29,6 +33,8 @@ func (h *Handler) signUp(c *gin.Context) {
 
 	accessToken, refreshToken, err := h.userService.SignUp(context.Background(), user)
 	if err != nil {
+		h.logger.Error("Error signing up user", err)
+
 		writeErr(c, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -45,11 +51,15 @@ func (h *Handler) signIn(c *gin.Context) {
 	var input models.SignInInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
+		h.logger.Error("Error binding JSON for signIn", err)
+
 		validationErr(c)
 		return
 	}
 
 	if err := input.Validate(); err != nil {
+		h.logger.Error("Validation error for signIn", err)
+
 		validationErr(c)
 		return
 	}
@@ -57,9 +67,13 @@ func (h *Handler) signIn(c *gin.Context) {
 	accessToken, refreshToken, err := h.userService.SignIn(context.Background(), input.Email, input.Password)
 	if err != nil {
 		if errors.Is(err, models.ErrWrongEmailOrPassword) {
+			h.logger.Error("Invalid email or password", err)
+
 			writeErr(c, http.StatusUnauthorized, err.Error())
 			return
 		}
+
+		h.logger.Error("Error signing in user", err)
 
 		writeErr(c, http.StatusInternalServerError, err.Error())
 		return
@@ -78,6 +92,8 @@ func (h *Handler) refresh(c *gin.Context) {
 
 	accessToken, refreshToken, err := h.userService.Refresh(context.Background(), token)
 	if err != nil {
+		h.logger.Error("Error refreshing token", err)
+
 		writeErr(c, http.StatusInternalServerError, err.Error())
 		return
 	}
