@@ -6,6 +6,16 @@ import (
 )
 
 func (s *userStorage) Update(ctx context.Context, user *models.User) error {
+	const op = "userStorage.Update"
+
+	query := `UPDATE users SET name = $1, email = $2, password_hash = $3 WHERE id = $4`
+
+	_, err := s.conn.Exec(ctx, query, user.Name, user.Email, user.Password, user.ID)
+	if err != nil {
+		s.logger.Error("failed to update user", op, err)
+		return models.ErrInternal
+	}
+
 	return nil
 }
 
