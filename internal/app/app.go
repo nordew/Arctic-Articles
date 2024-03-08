@@ -7,9 +7,13 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/nordew/ArcticArticles/internal/config"
 	v1 "github.com/nordew/ArcticArticles/internal/controller/http/v1"
+	"github.com/nordew/ArcticArticles/internal/service/article"
+	"github.com/nordew/ArcticArticles/internal/service/feed"
 	"github.com/nordew/ArcticArticles/internal/service/user"
+	articlesStorage "github.com/nordew/ArcticArticles/internal/storage/articles"
 	userStorage "github.com/nordew/ArcticArticles/internal/storage/user"
 	"github.com/nordew/ArcticArticles/pkg/auth"
+	redisClient "github.com/nordew/ArcticArticles/pkg/client/redis"
 	"github.com/nordew/ArcticArticles/pkg/hasher"
 	"github.com/nordew/ArcticArticles/pkg/logging"
 	"log"
@@ -33,14 +37,20 @@ func MustRun() {
 		log.Fatalf("failed to connect to postges: %s", err.Error())
 	}
 
+	redisAddress := fmt.Sprintf("localhost:%d", cfg.RedisConfig.Port)
+	redisCl := redisClient.New(redisAddress, cfg.RedisConfig.Password)
+
 	userStorage := userStorage.NewUserStorage(conn, logger)
+	articleStorage := articlesStorage.NewArticleStorage(conn, logger)
 
 	passwordHasher := hasher.NewPasswordHasher(cfg.Salt)
 	auth := auth.NewAuth(cfg.SignKey, logger)
 
-	userService := user.NewUserService(userStorage, auth, passwordHasher)
+	userService := user.NewUserService(userStorage, redisCl, auth, passwordHasher)
+	articlesService := article.NewArticleService(articleStorage, redisCl, logger)
+	feedService := feed.NewFeedService(redisCl, articleStorage, logger, 20)
 
-	handler := v1.NewHandler(userService, auth, logger)
+	handler := v1.NewHandler(userService, articlesService, feedService, auth, passwordHasher, logger)
 
 	router := handler.Init()
 
