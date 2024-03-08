@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"github.com/nordew/ArcticArticles/internal/domain/models"
 	"github.com/nordew/ArcticArticles/pkg/auth"
 )
 
@@ -24,4 +25,8 @@ func (s *userService) Refresh(ctx context.Context, token string) (string, string
 	}
 
 	return accessToken, refreshToken, nil
+}
+
+func (s *userService) Update(ctx context.Context, user *models.User) error {
+	return s.userStorage.Update(ctx, user)
 }
