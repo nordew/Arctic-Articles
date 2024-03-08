@@ -5,18 +5,23 @@ import (
 	"github.com/nordew/ArcticArticles/internal/storage"
 	"github.com/nordew/ArcticArticles/pkg/auth"
 	"github.com/nordew/ArcticArticles/pkg/hasher"
+	"github.com/redis/go-redis/v9"
 )
 
 type userService struct {
 	userStorage storage.UserStorage
-	auth        auth.Authenticator
-	hasher      hasher.Hasher
+	redisCl     *redis.Client
+
+	auth   auth.Authenticator
+	hasher hasher.Hasher
 }
 
-func NewUserService(userStorage storage.UserStorage, auth auth.Authenticator, hasher hasher.Hasher) service.UserService {
+func NewUserService(userStorage storage.UserStorage, redisCl *redis.Client, auth auth.Authenticator, hasher hasher.Hasher) service.UserService {
 	return &userService{
 		userStorage: userStorage,
-		auth:        auth,
-		hasher:      hasher,
+		redisCl:     redisCl,
+
+		auth:   auth,
+		hasher: hasher,
 	}
 }
