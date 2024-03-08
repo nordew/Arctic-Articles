@@ -15,8 +15,14 @@ type PGConfig struct {
 	PGSSLMode  string `env:"POSTGRES_SSL_MODE"`
 }
 
+type RedisConfig struct {
+	Port     int    `env:"REDIS_PORT"`
+	Password string `env:"REDIS_PASSWORD"`
+}
+
 type Config struct {
 	PGConfig
+	RedisConfig
 
 	Salt     string `env:"SALT"`
 	SignKey  string `env:"SIGN_KEY"`
