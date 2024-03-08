@@ -6,12 +6,12 @@ import (
 )
 
 type Article struct {
-	ArticleID     string
-	Title         string `validate:"required"`
-	Content       string `validate:"required"`
-	Author        string
-	DatePublished time.Time
-	ImageURL      string
+	ArticleID     string    `json:"id"`
+	Title         string    `json:"title" validate:"required"`
+	Content       string    `json:"content" validate:"required"`
+	Author        string    `json:"author"`
+	DatePublished time.Time `json:"date_published"`
+	ImageURL      string    `json:"image_url"`
 }
 
 func (a *Article) Validate() error {
