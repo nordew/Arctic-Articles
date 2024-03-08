@@ -25,7 +25,7 @@ func (s *userStorage) GetByID(ctx context.Context, userID string) (*models.User,
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, models.ErrWrongEmailOrPassword
+			return nil, models.ErrUserNotFound
 		}
 
 		s.logger.Error("failed to get user", err.Error(), op)
@@ -53,7 +53,7 @@ func (s *userStorage) GetByEmail(ctx context.Context, email string) (*models.Use
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, models.ErrWrongEmailOrPassword
+			return nil, models.ErrUserNotFound
 		}
 
 		s.logger.Error("failed to get user", err.Error(), op)
