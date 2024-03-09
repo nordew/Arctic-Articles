@@ -15,6 +15,14 @@ type PGConfig struct {
 	PGSSLMode  string `env:"POSTGRES_SSL_MODE"`
 }
 
+type MinioConfig struct {
+	Host     string `env:"MINIO_HOST"`
+	Port     string `env:"MINIO_PORT"`
+	User     string `env:"MINIO_USER"`
+	Password string `env:"MINIO_PASSWORD"`
+	SSL      bool   `env:"MINIO_SSL"`
+}
+
 type RedisConfig struct {
 	Port     int    `env:"REDIS_PORT"`
 	Password string `env:"REDIS_PASSWORD"`
@@ -23,6 +31,7 @@ type RedisConfig struct {
 type Config struct {
 	PGConfig
 	RedisConfig
+	MinioConfig
 
 	Salt     string `env:"SALT"`
 	SignKey  string `env:"SIGN_KEY"`
